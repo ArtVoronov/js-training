@@ -14,9 +14,14 @@ const sayHi = () => {
 }
 const fault = () => {
     // Не правильно ставить только на не верно введенное поле класс))
-    inputs[0].classList.add('invalid')
-    inputs[1].classList.add('invalid')
+    inputs[0].classList.add("invalid")
+    inputs[1].classList.add("invalid")
     console.warn("so sad")
+    let alert = document.createElement("p")
+
+    alert.innerHTML = "email or password is wrong"
+    alert.className = "alert"
+    container.append(alert)
 }
 
 check()
@@ -29,14 +34,14 @@ const User = {
     name:"PersonalName",
 }
 
-document.addEventListener('keyup', function(event) {
+document.addEventListener("keyup", function(event) {
     
     if (event.target.value !== undefined) {
         check()
         if (event.target.value.length > 0) {
-            event.target.classList.remove('invalid')
+            event.target.classList.remove("invalid")
         } else {
-            event.target.classList.add('invalid')
+            event.target.classList.add("invalid")
         }
     }
 }, false);
