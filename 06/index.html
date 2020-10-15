@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="form.css">
+    <title>Document</title>
+</head>
+<body>
+    <div id="container">
+        <div id="switcher">
+            <div class="active">Login</div>
+            <div>Register</div>
+        </div>
+        <div id="form-container">
+            <form class="form active">
+                <input placeholder="email" type="text" id="email">
+                <input placeholder="password" type="password" id="password">
+                <input type="submit" id="submit" value="Login">
+            </form>
+            <form class="form">
+                <input placeholder="name" type="text" id="name">
+                <input placeholder="age" type="text" id="age">
+                <input placeholder="email" type="text">
+                <input placeholder="city" type="text">
+                <input placeholder="password" type="password">
+                <input placeholder="repeat password" type="password">
+                <input type="submit" id="submit" value="Register">
+            </form>
+        </div>
+        <div id="alert">
+        </div>
+    </div>
+</body>
+    <script src="index.js"></script>
+</html>
