@@ -19,20 +19,19 @@ div.style = "background:red; color:white; padding:20px"
 document.body.append(div)
 
 let ol = document.createElement("ol")
-document.body.append(ol)
 
 const list = ["Viktor", "Tatiana", "Eduard", "Michael", "Denis", "Peter", "Ann", "Dmitry", "Sergey", "Ivan", "Alan"]
 
 list.forEach((name, index) => {
     let li = document.createElement("li")
-    if ((index + 1) % 2 === 0) {
-        li.className = "even"
-    } else {
-        li.className = "odd"
-    }
+
+    li.className.add(((index + 1) % 2 === 0)?"even":"odd")
+
     li.innerHTML = name
     ol.append(li)
 });
+
+document.body.append(ol)
     
 const sheet = new CSSStyleSheet()
 sheet.replaceSync('.even {color: green} .odd {color: blue}')
