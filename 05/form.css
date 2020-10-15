@@ -16,7 +16,7 @@ body {
 }
 #container {
     min-width: 20em;
-    min-height: 10em;
+    min-height: 430px;
     padding: 3em;
     display: flex;
     align-items: center;
@@ -27,16 +27,67 @@ body {
     border-radius: 10px;
 }
 
+#switcher{
+    display: flex;
+    align-content: space-between;
+    flex-grow: 1;
+}
+
+#switcher div {
+    cursor: pointer;
+    display: table;
+    width: auto;
+    font-style: oblique;
+    font-size: 1em;
+    margin: 1em;
+    padding: 1em;
+    border: 0;
+    transition: 0.2s linear;
+    background-color: #E8E8E8;
+}
+
+#switcher div:hover {
+    background-color: #F5F5F5;
+}
+
+#switcher div.active {
+    background-color: #F5F5F5;
+    cursor: default;
+}
+#switcher div.active:hover {
+    cursor: default;
+}
+
+#form-container{
+    flex-grow: 3;
+    display: flex;
+    width: auto;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    flex-basis: auto;
+}
+
+#alert{
+    min-height: 15px;
+    max-height: 15px;
+    padding:0;
+}
+
 form {
     display: flex;
     width: auto;
+    height: 300px;
+    align-items: center;
+    justify-content: center;
     flex-direction: column;
+    flex-basis: auto;
+    transition: 0.5s linear;
 }
 
-input.invalid {
-    border: red solid 1px;
-    padding: 0px 1px 0px 1px;
-}
+/* form.active {
+    display: flex;
+} */
 
 input {
     min-width: 20em;
@@ -46,6 +97,11 @@ input {
     transition: 0.2s linear;
     border: 0px;
     outline: none;
+    border: #E8E8E8 solid 3px;
+}
+
+input.invalid {
+    border: red solid 3px;
 }
 
 input#submit {
@@ -58,9 +114,15 @@ input::placeholder {
 
 input:hover, input:focus{
     background-color: #F5F5F5;
+    border: #F5F5F5 solid 3px;
+}
+
+input.invalid:hover, input.invalid:focus{
+    border: red solid 3px;
 }
 
 .alert {
-    color:red
+    color:red;
+    transition: 0.2s linear;
 }
 

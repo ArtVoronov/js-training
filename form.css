@@ -85,6 +85,15 @@ form {
     transition: 0.5s linear;
 }
 
+/* form.active {
+    display: flex;
+} */
+
+input.invalid {
+    border: red solid 1px;
+    padding: 0px 1px 0px 1px;
+}
+
 input {
     min-width: 20em;
     margin: 0.5em;
@@ -93,11 +102,6 @@ input {
     transition: 0.2s linear;
     border: 0px;
     outline: none;
-    border: #E8E8E8 solid 3px;
-}
-
-input.invalid {
-    border: red solid 3px;
 }
 
 input#submit {
@@ -110,11 +114,6 @@ input::placeholder {
 
 input:hover, input:focus{
     background-color: #F5F5F5;
-    border: #F5F5F5 solid 3px;
-}
-
-input.invalid:hover, input.invalid:focus{
-    border: red solid 3px;
 }
 
 .alert {
