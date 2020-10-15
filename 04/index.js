@@ -25,7 +25,7 @@ const list = ["Viktor", "Tatiana", "Eduard", "Michael", "Denis", "Peter", "Ann",
 
 list.forEach((name, index) => {
     let li = document.createElement("li")
-    if (index % 2 === 0) {
+    if ((index + 1) % 2 === 0) {
         li.className = "even"
     } else {
         li.className = "odd"
