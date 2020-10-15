@@ -2,7 +2,7 @@ const container = document.getElementById("container")
 
 
 const switcher = document.getElementById("switcher")
-const formDiv = document.getElementById("form-container")
+// const formDiv = document.getElementById("form-container")
 let form = document.getElementsByClassName("form")
 const alertDiv = document.getElementById("alert")
 

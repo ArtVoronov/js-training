@@ -34,15 +34,16 @@ const User = {
     name:"PersonalName",
 }
 
-document.addEventListener("keyup", function(event) {
+document.addEventListener("keyup", function() {
     
     if (event.target.value !== undefined) {
-        check()
+        
         if (event.target.value.length > 0) {
             event.target.classList.remove("invalid")
         } else {
             event.target.classList.add("invalid")
         }
+        check()
     }
 }, false);
 
