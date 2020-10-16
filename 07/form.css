@@ -108,6 +108,11 @@ input#submit {
     margin-top: 1.5em;
 }
 
+input#submit:hover {
+    margin-top: 1.5em;
+    background-color: #BEBEBE;
+}
+
 input::placeholder {
     text-align: center;
 }

@@ -77,12 +77,16 @@ body {
 form {
     display: flex;
     width: auto;
-    height: 300px;
+    height: fit-content;;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     flex-basis: auto;
     transition: 0.5s linear;
+}
+
+input:first-child {
+    margin-top: 3em;
 }
 
 input {
@@ -106,6 +110,12 @@ input#submit {
 
 input::placeholder {
     text-align: center;
+}
+
+input#submit:hover {
+    margin-top: 1.5em;
+    background-color: #BEBEBE;
+    border: #BEBEBE solid 3px;
 }
 
 input:hover, input:focus{
