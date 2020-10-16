@@ -24,7 +24,7 @@ let deleteChars = (str) => {
 }
 
 let convertFloor = (floor) => {
-    return floor<0?floor:floor>13?floor:floor+1
+    return floor < 0 ? floor : floor > 13 ? floor : floor + 1
 }
 
 function convertType(value, toType) {

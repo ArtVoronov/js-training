@@ -1,7 +1,7 @@
 function fizzBuzz(n) {
     return (n%5===0)&&(n%3===0)?"FizzBuzz!":((n%5===0)?"Buzz!":((n%3===0)?"Fizz!":""))
 }
-// console.log(fizzBuzz(8))
+
 
 function toNumber(value) {
     if (!isNaN(Number(value))) {
@@ -11,7 +11,6 @@ function toNumber(value) {
     }
 }
 
-// console.log(toNumber("1"))
 
 function createUser(name, age, height, weight) {
 
@@ -26,10 +25,9 @@ function createUser(name, age, height, weight) {
     } else
     if (!typeof weight == "number" || !toNumber(weight) || weight < 0) {
         return null
-    } else return {name, weight, age, height, skills:{run:run(weight), volleyball:volleyball(height,weight), videoGames:videoGames(age, height, weight)}}
+                } else return { name, weight, age, height, skills: { run: run(weight), volleyball: volleyball(height, weight), videoGames: videoGames(age, height, weight) } }
 }
 
-// let user = createUser("asd", 1, 130, 1)
 
 function run(weight){
         if (weight < 100 && weight > 0) {
@@ -42,6 +40,7 @@ function run(weight){
         } else return false
     }
 
+
     function videoGames(age, height, weight) {
         if (age < 18 && height > 140) {
             return true
@@ -49,9 +48,9 @@ function run(weight){
             return true
         } else return false
 }
+
     
 function isPalindrom(word) {
-
     for (let i = 0; i < (word.length / 2); i++){
         if (!(word[i] == word[word.length - 1 - i])) {
             return false
@@ -59,7 +58,7 @@ function isPalindrom(word) {
     }
     return true
 }
-// console.log(isPalindrom("abbbba"))
+
 
 function quadraticEquation(a, b, c) {
     
