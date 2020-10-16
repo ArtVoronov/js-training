@@ -15,7 +15,7 @@ const Template = [`
     <input type="submit" id="submit" value="Register">
 `]
 
-const errorMessage = {login:'Please check login', name: 'Name is empty',rPassword:"Password don't match"}
+const errorMessage = { login: 'Please check login', name: 'Name is empty', rPassword: "Password don't match" }
 
 let inputs
 let buttonSubmit
@@ -31,7 +31,7 @@ const initForm = (template) => {
     buttonSubmit = inputs.submit
     buttonSubmit.disabled = check()
     Array.from(inputs).forEach(elem => {
-        elem.addEventListener("click", () => {
+        elem.addEventListener("keyup", () => {
             listenButtons()
             sendToCheckValues()
         }, false);
@@ -125,7 +125,7 @@ const sendToCheckValues = () => {
         inputs.name.classList.add("invalid")
     }
 
-    console.log(`PASSORD: ${userInfo.password}`)
+    console.log(`PASSWORD: ${userInfo.password}`)
     if (userInfo.password) {
         if (userInfo.password.includes(userInfo["repeat password"], 0)) {
             if (userInfo.password === userInfo["repeat password"]) {
