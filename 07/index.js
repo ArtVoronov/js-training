@@ -1,97 +1,237 @@
-const container = document.getElementById("container")
+const formContainer = document.getElementById("form-container")
 
+const Template = [`
+    <input placeholder="email" type="text" id="email">
+    <input placeholder="password" type="password" id="password">
+    <input type="submit" id="submit" value="Login">
+`,`
+    <input placeholder="login" type="text" id="login">    
+    <input placeholder="name" type="text" id="name">
+    <input placeholder="age" type="text" id="age">
+    <input placeholder="email" type="text" id="email">
+    <input placeholder="city" type="text" id="city">
+    <input placeholder="password" type="password" id="password">
+    <input placeholder="repeat password" type="password" id="repeat password">
+    <input type="submit" id="submit" value="Register">
+`]
+
+const INVALID_CLASS = "invalid"
+const ACTIVE_CLASS = "active"
+//empty - не может случится но пускай)
+const errorMessage = {wLogin:"email or password is wrong", login: 'Please check login', name: 'Name is empty', age:'Age is not a number', email:'Email is not email', city:'City is empty', password:'Password is empty', rPassword: "Password don't match" }
+
+let inputs
+let buttonSubmit
+
+class User {
+    constructor(login, name, age, email, city, password, rPassword) {
+        this.login = login
+        this.name = name
+        this.age = age
+        this.email = email
+        this.city = city
+        this.password = password
+        this["repeat password"] = rPassword
+    }
+}
+
+const regObject = {
+    login: /^[^,.]+$/,
+    age: /^\d+$/,
+    email: /\S+@\S+\.\S+/
+}
+
+const initForm = (template) => {
+    let form = document.createElement('form')
+    form.className = "form"
+    form.id = "form"
+    form.innerHTML = template
+    formContainer.append(form)
+    inputs = form.getElementsByTagName('input')
+    buttonSubmit = inputs.submit
+    buttonSubmit.disabled = disabledButtonState()
+    Array.from(inputs).forEach(elem => {
+        elem.addEventListener("input", () => {
+            eventHandler()
+        }, false);
+    })
+    buttonSubmit.addEventListener("click", onClick)
+}
+
+const removeForm = () => {
+    formContainer.innerHTML = ""
+}
 
 const switcher = document.getElementById("switcher")
-// const formDiv = document.getElementById("form-container")
-let form = document.getElementsByClassName("form")
-const alertDiv = document.getElementById("alert")
 
+const sections = switcher.getElementsByTagName('div')
 
-const sections = switcher.getElementsByTagName("div")
-let active = sections[0].getElementsByClassName("active")
-
-// console.log(sections)
-
-const User = {
-    email: "email",
-    password: "password",
-    name:"PersonalName",
+for (let section of sections) {
+    section.addEventListener("click", setActive)
 }
 
-let text = [`Hello, ${User.name}`]
+setActive(sections[0])
 
-if (active.innerHTML === "Login") {
-    form = form[0]
-    active = sections[0]
-    active.classList.add("active")
-    sections[1].classList.remove("active")
-} else {
-    form = form[1]
-    active = sections[1]
-    active.classList.add("active")
-    sections[0].classList.remove("active")
-}
-
-
-const inputs = Array.from(form.getElementsByTagName("input")).slice(0, 2)
-const button = document.getElementById("submit")
-
-
-// console.log(Array.from(sections).indexOf(active)) //index active class
-
-switcher.addEventListener('click', () => {
-    console.log(Array.from(event.target.classList))
-    if (Array.from(event.target.classList).indexOf("active") === -1) {
-        active = switcher.getElementsByClassName("active")[1]
+function setActive(target) {
+    if (target.target) {
+        target = target.target
     }
-}, false)
-
-const check = () => {
-    if (inputs[0].value.length > 0 && inputs[1].value.length > 0) {
-        button.disabled = false
-    } else button.disabled = true
-}
-const sayHi = () => {
-    container.innerHTML = text[0]
-}
-const fault = () => {
-    // Не правильно ставить только на не верно введенное поле класс))
-    inputs[0].classList.add("invalid")
-    inputs[1].classList.add("invalid")
-    console.warn("so sad")
-    let alert = document.createElement("p")
-
-    alert.innerHTML = "email or password is wrong"
-    alert.className = "alert"
-    alertDiv.append(alert)
-    setTimeout(() => {
-        alert.remove()
-    },2000)
+    console.log(sections)
+    console.log(target)
+    console.log(Array.from(sections).indexOf(target))
+    console.log(Math.abs(Array.from(sections).indexOf(target) - 1))
+    sections[Math.abs(Array.from(sections).indexOf(target))].classList.add(ACTIVE_CLASS)
+    // target.classList.add(ACTIVE_CLASS)
+    sections[Math.abs(Array.from(sections).indexOf(target) - 1)].classList.remove(ACTIVE_CLASS)
+    console.log(Math.abs(Array.from(sections).indexOf(target) - 1))
+    removeForm()
+    initForm(Template[Math.abs(Array.from(sections).indexOf(target))])
 }
 
-check()
-
-function listenButtons() {
+function eventHandler() {
     if (event.target.value !== undefined) {
-        check()
+        checkUserData(event.target)
+        buttonSubmit.disabled = disabledButtonState()
+        setTargetInvalidOnBlur(event.target)
         if (event.target.value.length > 0) {
-            event.target.classList.remove("invalid")
+            event.target.classList.remove(INVALID_CLASS)
         } else {
-            event.target.classList.add("invalid")
+            event.target.classList.add(INVALID_CLASS)
         }
     }
 }
 
-inputs[0].addEventListener("keyup", listenButtons, false);
-inputs[1].addEventListener("keyup", listenButtons, false);
-
-button.onclick = () => {
-    event.preventDefault()
-    const email = inputs[0].value
-    const password = inputs[1].value
-    if (email === User.email && password === User.password) {
-        sayHi()
-    } else {
-        fault()
+function setTargetInvalidOnBlur(target) {
+    Array.from(inputs).forEach(elem => {
+        elem.classList.remove(INVALID_CLASS)
+    })
+    target.classList.add(INVALID_CLASS)
+    target.onblur = () => {
+        if (target.value.length > 0) { target.classList.remove(INVALID_CLASS) }
     }
+}
+
+function disabledButtonState() {
+    let disabled = true
+    Array.from(inputs).forEach(input => {
+        if (input.type !== 'submit') {
+            if (input.value.length > 0) {
+                disabled = false
+            } else {
+                return disabled = true
+            }
+        }
+    })
+    return disabled
+}
+disabledButtonState()
+
+const fault = (errorMessage) => {
+    
+    if (!document.getElementById("alert")){
+        let alert = document.createElement("p")
+
+        alert.innerText = errorMessage
+        alert.className = "alert"
+        alert.id = "alert"
+        container.append(alert)
+
+        console.log(alert)
+
+        setTimeout(() => {
+            alert.remove()
+        }, 2000)
+        return null
+    }    
+}
+
+const removeFault = () => {
+    if (document.getElementById("alert")) {
+        document.getElementById("alert").remove()
+    }
+}
+
+const getData = (userInfo) => {
+    Array.from(inputs).forEach(input => {
+        if(input.type !== 'submit')
+        userInfo[input.id] = input.value
+    })
+    return userInfo
+}
+
+inputs[0].focus()
+
+const checkUserData = (target) => {
+    console.log(target.value)
+    let regExp
+    switch (target.id) {
+        case "login": {
+            regExp = new RegExp(regObject.login)
+            if (regExp.test(target.value)) {
+                console.log("Nice login")
+            } else fault(errorMessage.login)
+            break;
+        }
+        case "name": {
+            if (target.value.length>0) {
+                console.log("Nice name")
+            } else fault(errorMessage.name)
+            break;
+        }
+        case "age": {
+            regExp = new RegExp(regObject.age)
+
+            if (regExp.test(target.value)) {
+                console.log("Nice age")
+            } else fault(errorMessage.age)
+            break;
+        }
+        case "email": {
+            regExp = new RegExp(regObject.email)
+    
+            if (regExp.test(target.value)) {
+                console.log("Nice email")
+            } else fault(errorMessage.email)
+            break;
+        }
+        case "city": {
+            if (target.value.length>0) {
+                console.log("Nice city")
+            } else fault(errorMessage.city)
+            break;
+        }
+            case "repeat password":
+        case "password": {
+            if (target.value.length > 0) {
+                
+                if(inputs["repeat password"]){
+                    if (inputs["repeat password"].value === inputs.password.value) {
+                        console.log("Nice password")
+                    } else if ((inputs["repeat password"].value.length > 0 && inputs.password.value.length > 0)) { fault(errorMessage.rPassword) }
+                }
+            }
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+const sayHi = () => {
+    container.innerText = `Hello, ${User.name}`
+}
+
+function onClick () {
+    event.preventDefault()
+    let user = new User()
+    getData(user)
+    console.log(user)
+    switch (event.target.value) {
+        case "Login": {
+            if (inputs.email === User.email && inputs.password === User.password) { sayHi() } else fault(errorMessage.wLogin)
+            break;
+        }
+        case "Register": break;
+    }
+    
 }
