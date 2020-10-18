@@ -15,23 +15,22 @@ const Template = [`
     <input type="submit" id="submit" value="Register">
 `]
 
-const errorMessage = { login: 'Please check login', name: 'Name is empty', rPassword: "Password don't match" }
+const INVALID_CLASS = "invalid"
+//empty - не может случится но пускай)
+const errorMessage = { login: 'Please check login', name: 'Name is empty', age:'Age is not a number', email:'Email is not email', city:'City is empty', password:'Password is empty', rPassword: "Password don't match" }
 
 let inputs
 let buttonSubmit
 
 class User {
-    constructor(login, name, age, email, city, password) {
+    constructor(login, name, age, email, city, password, rPassword) {
         this.login = login
         this.name = name
         this.age = age
         this.email = email
         this.city = city
         this.password = password
-    }
-
-    checkData() {
-        checkUserData(this)
+        this["repeat password"] = rPassword
     }
 }
 
@@ -49,70 +48,53 @@ const initForm = (template) => {
     formContainer.append(form)
     inputs = form.getElementsByTagName('input')
     buttonSubmit = inputs.submit
-    buttonSubmit.disabled = check()
+    buttonSubmit.disabled = disabledButtonState()
     Array.from(inputs).forEach(elem => {
-        elem.addEventListener("keyup", () => {
-            listenButtons()
+        elem.addEventListener("input", () => {
+            eventHandler()
         }, false);
     })
-    // console.log(buttonSubmit)
+    buttonSubmit.addEventListener("click", onClick)
 }
 
 
 initForm(Template[1])
 
-const removeForm = () => {
-    formContainer.innerHTML = ""
-    Array.from(inputs).forEach(elem => {
-        
-    })
-}
-
 const switcher = document.getElementById("switcher")
 
 const sections = switcher.getElementsByTagName('div')
-const forms = document.getElementsByTagName('form')
-
 
 function setActive() {
-    // sections.item(Math.abs(Array.from(sections).indexOf(event.target) - 1)).classList.remove('active')
-    // sections.item(Math.abs(Array.from(sections).indexOf(event.target))).classList.add('active')
-
-    // removeForm()
     initForm(Template[Math.abs(Array.from(sections).indexOf(event.target))])
 }
 
-// for (let section of sections) {
-//     section.addEventListener('click',setActive,false)
-// }
-
-
-function listenButtons() {
+function eventHandler() {
     if (event.target.value !== undefined) {
-        buttonSubmit.disabled = check()
+        checkUserData(event.target)
+        buttonSubmit.disabled = disabledButtonState()
         setTargetInvalidOnBlur(event.target)
         if (event.target.value.length > 0) {
-            event.target.classList.remove("invalid")
+            event.target.classList.remove(INVALID_CLASS)
         } else {
-            event.target.classList.add("invalid")
+            event.target.classList.add(INVALID_CLASS)
         }
     }
 }
 
 function setTargetInvalidOnBlur(target) {
     Array.from(inputs).forEach(elem => {
-        elem.classList.remove("invalid")
+        elem.classList.remove(INVALID_CLASS)
     })
-    target.classList.add("invalid")
+    target.classList.add(INVALID_CLASS)
     target.onblur = () => {
-        if (target.value.length > 0) { target.classList.remove("invalid") }
+        if (target.value.length > 0) { target.classList.remove(INVALID_CLASS) }
     }
 }
 
-function check() {
+function disabledButtonState() {
     let disabled = true
     Array.from(inputs).forEach(input => {
-        if (input.type !== 'submit'){
+        if (input.type !== 'submit') {
             if (input.value.length > 0) {
                 disabled = false
             } else {
@@ -122,101 +104,99 @@ function check() {
     })
     return disabled
 }
-
+disabledButtonState()
 
 const fault = (errorMessage) => {
-    let alert = document.createElement("p")
+    
+    if (!document.getElementById("alert")){
+        let alert = document.createElement("p")
 
-    alert.innerHTML = errorMessage
-    alert.className = "alert"
-    container.append(alert)
+        alert.innerText = errorMessage
+        alert.className = "alert"
+        alert.id = "alert"
+        container.append(alert)
 
-    setTimeout(() => {
-        alert.remove()
-    }, 2000)
-    return null
+        console.log(alert)
+
+        setTimeout(() => {
+            alert.remove()
+        }, 2000)
+        return null
+    }    
+}
+
+const removeFault = () => {
+    if (document.getElementById("alert")) {
+        document.getElementById("alert").remove()
+    }
 }
 
 const getData = (userInfo) => {
     Array.from(inputs).forEach(input => {
-        if(input.type !== 'submit' && input.id !== 'repeat password')
+        if(input.type !== 'submit')
         userInfo[input.id] = input.value
     })
     return userInfo
 }
 
-const checkUserData = (userInfo) => {
+inputs.login.focus()
+
+const checkUserData = (target) => {
+    console.log(target.value)
     let regExp
-    for (const [id, value] of Object.entries(userInfo)) {
-        console.log(`${id} : ${value}`)
-        regExp = new RegExp(regObject.login)
-        regExp.test(userInfo.login)?true:false
-    }
-     
+    switch (target.id) {
+        case "login": {
+            regExp = new RegExp(regObject.login)
+            if (regExp.test(target.value)) {
+                console.log("Nice login")
+            } else fault(errorMessage.login)
+            break;
+        }
+        case "name": {
+            if (target.value.length>0) {
+                console.log("Nice name")
+            } else fault(errorMessage.name)
+            break;
+        }
+        case "age": {
+            regExp = new RegExp(regObject.age)
 
-    if () {
-        console.log("Nice login")
-    }
-
-    if (userInfo.name.length > 0) {
-        console.log("Nice name")
-    }
-
-    regExp = new RegExp(regObject.age)
-
-    if (regExp.test(userInfo.age)) {
-        console.log("Nice age")
-    }
-
-    regExp = new RegExp(regObject.email)
+            if (regExp.test(target.value)) {
+                console.log("Nice age")
+            } else fault(errorMessage.age)
+            break;
+        }
+        case "email": {
+            regExp = new RegExp(regObject.email)
     
-    if (regExp.test(userInfo.email)) {
-        console.log("Nice email")
+            if (regExp.test(target.value)) {
+                console.log("Nice email")
+            } else fault(errorMessage.email)
+            break;
+        }
+        case "city": {
+            if (target.value.length>0) {
+                console.log("Nice city")
+            } else fault(errorMessage.city)
+            break;
+        }
+            case "repeat password":
+        case "password": {
+            if (target.value.length>0) {
+                if (inputs["repeat password"].value === inputs.password.value) {
+                    console.log("Nice password")
+                } else if ((inputs["repeat password"].value.length > 0 && inputs.password.value.length > 0)) { fault(errorMessage.rPassword) }
+            }
+            break;
+        }
+        default:
+            break;
     }
 }
 
-submit.onclick = () => {
+function onClick () {
     event.preventDefault()
     let user = new User()
     getData(user)
-    user.checkData()
+    console.log(user)
 }
-
-
-
-
-// trash
-
-// let userInfo = {}
-//     Array.from(inputs).forEach(elem => {
-//         if (elem.id !== 'submit' && elem.value.length > 0) {
-//             userInfo[elem.id] = elem.value
-//         }
-//     })
-//     console.log(userInfo)
-
-//     let regExp = new RegExp("^[^,.]+$")
-
-//     if (!regExp.test(userInfo.login)) {
-//         fault(errorMessage.login)
-//         inputs.login.classList.add("invalid")
-//     }
-
-//     if (name.length === 0 && event.target.id === userInfo.id) {
-//         console.log()
-//         fault(errorMessage.name)
-//         inputs.name.classList.add("invalid")
-//     }
-
-//     console.log(`PASSWORD: ${userInfo.password}`)
-//     if (userInfo.password) {
-//         if (userInfo.password.includes(userInfo["repeat password"], 0)) {
-//             if (userInfo.password === userInfo["repeat password"]) {
-//                 console.log("NicePassword!")
-//             } else {
-//                 fault(errorMessage.rPassword)
-//                 console.log(inputs["repeat password"])
-//                 inputs["repeat password"].classList.add("invalid")
-//             }
-//         }
-//     }
