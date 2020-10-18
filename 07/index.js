@@ -1,237 +1,110 @@
-const formContainer = document.getElementById("form-container")
+function task2() {
+    function Modal() {
+        this.show = function () {
+            console.log(`show ${this.name}`)
+        }
 
-const Template = [`
-    <input placeholder="email" type="text" id="email">
-    <input placeholder="password" type="password" id="password">
-    <input type="submit" id="submit" value="Login">
-`,`
-    <input placeholder="login" type="text" id="login">    
-    <input placeholder="name" type="text" id="name">
-    <input placeholder="age" type="text" id="age">
-    <input placeholder="email" type="text" id="email">
-    <input placeholder="city" type="text" id="city">
-    <input placeholder="password" type="password" id="password">
-    <input placeholder="repeat password" type="password" id="repeat password">
-    <input type="submit" id="submit" value="Register">
-`]
+        this.hide = function() {
+            console.log(`hide ${this.name}`)
+        }
+    }
 
-const INVALID_CLASS = "invalid"
-const ACTIVE_CLASS = "active"
-//empty - не может случится но пускай)
-const errorMessage = {wLogin:"email or password is wrong", login: 'Please check login', name: 'Name is empty', age:'Age is not a number', email:'Email is not email', city:'City is empty', password:'Password is empty', rPassword: "Password don't match" }
-
-let inputs
-let buttonSubmit
-
-class User {
-    constructor(login, name, age, email, city, password, rPassword) {
-        this.login = login
+    function Warning(name, message) {
         this.name = name
-        this.age = age
-        this.email = email
-        this.city = city
-        this.password = password
-        this["repeat password"] = rPassword
+        this.message = message
+    }
+
+    function Success(name, message) {
+        this.name = name
+        this.message = message
+    }
+
+    const context = new Modal
+
+    Warning.prototype = context
+    Success.prototype = context
+
+    const obj = {
+        bingoBall: 2
+    }
+    const obj2 = {
+        bingeBall: 2
     }
 }
 
-const regObject = {
-    login: /^[^,.]+$/,
-    age: /^\d+$/,
-    email: /\S+@\S+\.\S+/
-}
 
-const initForm = (template) => {
-    let form = document.createElement('form')
-    form.className = "form"
-    form.id = "form"
-    form.innerHTML = template
-    formContainer.append(form)
-    inputs = form.getElementsByTagName('input')
-    buttonSubmit = inputs.submit
-    buttonSubmit.disabled = disabledButtonState()
-    Array.from(inputs).forEach(elem => {
-        elem.addEventListener("input", () => {
-            eventHandler()
-        }, false);
-    })
-    buttonSubmit.addEventListener("click", onClick)
-}
-
-const removeForm = () => {
-    formContainer.innerHTML = ""
-}
-
-const switcher = document.getElementById("switcher")
-
-const sections = switcher.getElementsByTagName('div')
-
-for (let section of sections) {
-    section.addEventListener("click", setActive)
-}
-
-setActive(sections[0])
-
-function setActive(target) {
-    if (target.target) {
-        target = target.target
-    }
-    console.log(sections)
-    console.log(target)
-    console.log(Array.from(sections).indexOf(target))
-    console.log(Math.abs(Array.from(sections).indexOf(target) - 1))
-    sections[Math.abs(Array.from(sections).indexOf(target))].classList.add(ACTIVE_CLASS)
-    // target.classList.add(ACTIVE_CLASS)
-    sections[Math.abs(Array.from(sections).indexOf(target) - 1)].classList.remove(ACTIVE_CLASS)
-    console.log(Math.abs(Array.from(sections).indexOf(target) - 1))
-    removeForm()
-    initForm(Template[Math.abs(Array.from(sections).indexOf(target))])
-}
-
-function eventHandler() {
-    if (event.target.value !== undefined) {
-        checkUserData(event.target)
-        buttonSubmit.disabled = disabledButtonState()
-        setTargetInvalidOnBlur(event.target)
-        if (event.target.value.length > 0) {
-            event.target.classList.remove(INVALID_CLASS)
-        } else {
-            event.target.classList.add(INVALID_CLASS)
-        }
-    }
-}
-
-function setTargetInvalidOnBlur(target) {
-    Array.from(inputs).forEach(elem => {
-        elem.classList.remove(INVALID_CLASS)
-    })
-    target.classList.add(INVALID_CLASS)
-    target.onblur = () => {
-        if (target.value.length > 0) { target.classList.remove(INVALID_CLASS) }
-    }
-}
-
-function disabledButtonState() {
-    let disabled = true
-    Array.from(inputs).forEach(input => {
-        if (input.type !== 'submit') {
-            if (input.value.length > 0) {
-                disabled = false
-            } else {
-                return disabled = true
+function task3() {
+    Object.prototype.bingo = function() {
+        for (let key in this) {
+            if (typeof this[key] !== "function" && key.startsWith("bingo")) {
+                console.log("bingo!")
+                return;
             }
         }
-    })
-    return disabled
-}
-disabledButtonState()
-
-const fault = (errorMessage) => {
-    
-    if (!document.getElementById("alert")){
-        let alert = document.createElement("p")
-
-        alert.innerText = errorMessage
-        alert.className = "alert"
-        alert.id = "alert"
-        container.append(alert)
-
-        console.log(alert)
-
-        setTimeout(() => {
-            alert.remove()
-        }, 2000)
-        return null
-    }    
-}
-
-const removeFault = () => {
-    if (document.getElementById("alert")) {
-        document.getElementById("alert").remove()
     }
 }
 
-const getData = (userInfo) => {
-    Array.from(inputs).forEach(input => {
-        if(input.type !== 'submit')
-        userInfo[input.id] = input.value
-    })
-    return userInfo
-}
-
-inputs[0].focus()
-
-const checkUserData = (target) => {
-    console.log(target.value)
-    let regExp
-    switch (target.id) {
-        case "login": {
-            regExp = new RegExp(regObject.login)
-            if (regExp.test(target.value)) {
-                console.log("Nice login")
-            } else fault(errorMessage.login)
-            break;
-        }
-        case "name": {
-            if (target.value.length>0) {
-                console.log("Nice name")
-            } else fault(errorMessage.name)
-            break;
-        }
-        case "age": {
-            regExp = new RegExp(regObject.age)
-
-            if (regExp.test(target.value)) {
-                console.log("Nice age")
-            } else fault(errorMessage.age)
-            break;
-        }
-        case "email": {
-            regExp = new RegExp(regObject.email)
-    
-            if (regExp.test(target.value)) {
-                console.log("Nice email")
-            } else fault(errorMessage.email)
-            break;
-        }
-        case "city": {
-            if (target.value.length>0) {
-                console.log("Nice city")
-            } else fault(errorMessage.city)
-            break;
-        }
-            case "repeat password":
-        case "password": {
-            if (target.value.length > 0) {
-                
-                if(inputs["repeat password"]){
-                    if (inputs["repeat password"].value === inputs.password.value) {
-                        console.log("Nice password")
-                    } else if ((inputs["repeat password"].value.length > 0 && inputs.password.value.length > 0)) { fault(errorMessage.rPassword) }
-                }
+function task4() {
+    class Anouncer {
+        constructor(name) {
+            this.present = function () {
+                console.log(`Hello, I am ${this.type} and I have size ${this.size}`)
             }
-            break;
         }
-        default:
-            break;
     }
-}
 
-const sayHi = () => {
-    container.innerText = `Hello, ${User.name}`
-}
-
-function onClick () {
-    event.preventDefault()
-    let user = new User()
-    getData(user)
-    console.log(user)
-    switch (event.target.value) {
-        case "Login": {
-            if (inputs.email === User.email && inputs.password === User.password) { sayHi() } else fault(errorMessage.wLogin)
-            break;
+    class Figure extends Anouncer {
+        constructor(size) {
+            super()
+            this.size = size
         }
-        case "Register": break;
     }
+
+    class Circle extends Figure {
+        constructor(size, type) {
+            super(size)
+            this.type = type
+        }
+        getArea(){
+            return this.size * 2 * Math.PI
+        }
+    }
+
+    class Square extends Figure{
+        constructor(size, type) {
+            super(size)
+            this.type = type
+        }
+        getArea(){
+            return this.size ** 2
+        }
+    }
+
+    const square = new Square(39, "square")
+
+    const circle = new Circle(12, "circle")
     
+    console.log(square.getArea())
+    square.present()
+
+    console.log(circle.getArea())
+    circle.present()
+}
+
+function task5() {
+    Number.prototype.add = function (number){
+        return this + number
+    }
+
+    Number.prototype.multiply = function (number){
+        return this * number
+    }
+
+    Number.prototype.divide = function (number){
+        return this / number
+    }
+
+    Number.prototype.minus = function (number){
+        return this - number
+    }
 }
