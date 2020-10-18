@@ -1,59 +1,75 @@
-const form = document.getElementById("form")
-// const submit = document.getElementById("submit")
-// const email = document.getElementById("email")
-const container = document.getElementById("container")
-const inputs = document.getElementsByTagName("input")
-
-const check = () => {
-    if (inputs[0].value.length > 0 && inputs[1].value.length > 0) {
-        inputs[2].disabled = false
-    } else inputs[2].disabled = true
-}
-const sayHi = () => {
-    container.innerHTML = `Hello, ${User.name}`
-}
-const fault = () => {
-    // Не правильно ставить только на не верно введенное поле класс))
-    inputs[0].classList.add("invalid")
-    inputs[1].classList.add("invalid")
-    console.warn("so sad")
-    let alert = document.createElement("p")
-
-    alert.innerHTML = "email or password is wrong"
-    alert.className = "alert"
-    container.append(alert)
-}
-
-check()
-
-// inputs[0].focus()
-
 const User = {
     email: "email",
     password: "password",
     name:"PersonalName",
 }
 
-document.addEventListener("keyup", function() {
-    
-    if (event.target.value !== undefined) {
-        
-        if (event.target.value.length > 0) {
-            event.target.classList.remove("invalid")
-        } else {
-            event.target.classList.add("invalid")
-        }
-        check()
-    }
-}, false);
+const container = document.getElementById("container")
+const form = document.getElementById("form")
+const email = document.getElementById("email")
+const password = document.getElementById("password")
+const buttonSubmit = document.getElementById("submit")
 
-submit.onclick = () => {
+email.addEventListener("input", eventHandler)
+password.addEventListener("input", eventHandler)
+buttonSubmit.addEventListener("click", onClick)
+
+
+const INVALID_CLASS = "invalid"
+console.log(email,password,submit)
+
+const setDisabledButtonState = () => {
+    buttonSubmit.disabled = !(email.value && password.value)
+}
+
+setDisabledButtonState()
+
+const sayHi = () => {
+    container.innerText = `Hello, ${User.name}`
+}
+const fault = () => {
+    // Не правильно ставить только на не верно введенное поле класс))
+    email.classList.add(INVALID_CLASS)
+    password.classList.add(INVALID_CLASS)
+    
+    if (!document.getElementById("alert")){
+        let alert = document.createElement("p")
+
+        alert.innerHTML = "email or password is wrong"
+        alert.className = "alert"
+        alert.id = "alert"
+        container.append(alert)
+    }
+}
+
+const removeFault = () => {
+    if (document.getElementById("alert")) {
+        document.getElementById("alert").remove()
+    }
+}
+
+email.focus()
+
+function onClick(event) {
     event.preventDefault()
-    const email = inputs[0].value
-    const password = inputs[1].value
-    if (email === User.email && password === User.password) {
+    const emailValue = email.value
+    const passwordValue = password.value
+    if (emailValue === User.email && passwordValue === User.password) {
         sayHi()
     } else {
         fault()
     }
+}
+
+function eventHandler(event) {
+    const hasInvalid = event.target.classList.contains(INVALID_CLASS)
+    const isValid = event.target.value !== ""
+
+    if (!hasInvalid && !isValid) {
+        event.target.classList.add(INVALID_CLASS)
+    } else {
+        event.target.classList.remove(INVALID_CLASS)
+    }
+    removeFault()
+    setDisabledButtonState()
 }
