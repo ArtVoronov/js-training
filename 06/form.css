@@ -98,6 +98,7 @@ input {
     border: 0px;
     outline: none;
     border: #E8E8E8 solid 3px;
+    border-radius: 3px;
 }
 
 input.invalid {
@@ -125,6 +126,7 @@ input:hover, input:focus{
 
 input.invalid:hover, input.invalid:focus{
     border: red solid 3px;
+    transition: 1s linear;
 }
 
 .alert {
