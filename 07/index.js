@@ -23,17 +23,17 @@ function task2() {
 
     Warning.prototype = context
     Success.prototype = context
+}
 
+
+function task3() {
     const obj = {
         bingoBall: 2
     }
     const obj2 = {
         bingeBall: 2
     }
-}
 
-
-function task3() {
     Object.prototype.bingo = function() {
         for (let key in this) {
             if (typeof this[key] !== "function" && key.startsWith("bingo")) {
@@ -46,7 +46,7 @@ function task3() {
 
 function task4() {
     class Anouncer {
-        constructor(name) {
+        constructor() {
             this.present = function () {
                 console.log(`Hello, I am ${this.type} and I have size ${this.size}`)
             }
